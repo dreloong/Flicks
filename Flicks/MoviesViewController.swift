@@ -7,6 +7,7 @@
 //
 
 import AFNetworking
+import MBProgressHUD
 import UIKit
 
 class MoviesViewController: UIViewController {
@@ -34,10 +35,15 @@ class MoviesViewController: UIViewController {
             delegateQueue: NSOperationQueue.mainQueue()
         )
 
+
+        let progressHud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        progressHud.labelText = "Loading"
+
         let task: NSURLSessionDataTask = session.dataTaskWithRequest(
             request,
-            completionHandler: {
-                (dataOrNil, response, error) in if let data = dataOrNil {
+            completionHandler: { (dataOrNil, response, error) in
+                progressHud.hide(true)
+                if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data,
                         options:[]
