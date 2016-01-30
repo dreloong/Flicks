@@ -15,6 +15,7 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     var movies: [NSDictionary]?
+    var refreshControl: UIRefreshControl!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,10 +23,30 @@ class MoviesViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
 
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "onRefresh", forControlEvents: .ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex: 0)
+
+        let progressHud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        progressHud.labelText = "Loading"
+
+        loadMovies()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+
+    func onRefresh() {
+        loadMovies()
+        refreshControl.endRefreshing()
+    }
+
+    func loadMovies() {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let request = NSURLRequest(
             URL: NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!,
-            cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData,
+            cachePolicy: .ReloadIgnoringLocalCacheData,
             timeoutInterval: 10
         )
 
@@ -35,14 +56,10 @@ class MoviesViewController: UIViewController {
             delegateQueue: NSOperationQueue.mainQueue()
         )
 
-
-        let progressHud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        progressHud.labelText = "Loading"
-
         let task: NSURLSessionDataTask = session.dataTaskWithRequest(
             request,
             completionHandler: { (dataOrNil, response, error) in
-                progressHud.hide(true)
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data,
@@ -55,10 +72,6 @@ class MoviesViewController: UIViewController {
             }
         )
         task.resume()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
 }
