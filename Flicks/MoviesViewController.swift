@@ -6,6 +6,7 @@
 //  Copyright © 2016 Xiaofei Long. All rights reserved.
 //
 
+import AFNetworking
 import UIKit
 
 class MoviesViewController: UIViewController {
@@ -21,9 +22,8 @@ class MoviesViewController: UIViewController {
         tableView.delegate = self
 
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
         let request = NSURLRequest(
-            URL: url!,
+            URL: NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!,
             cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData,
             timeoutInterval: 10
         )
@@ -75,6 +75,14 @@ extension MoviesViewController: UITableViewDataSource {
 
         cell.titleLabel.text = movie["title"] as? String
         cell.overviewLabel.text = movie["overview"] as? String
+
+        if let posterPath = movie["poster_path"] as? String {
+            let posterImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)
+            cell.posterImageView.setImageWithURL(posterImageUrl!)
+        } else {
+            cell.posterImageView.image = nil
+        }
+
         return cell
     }
 
