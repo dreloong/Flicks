@@ -17,9 +17,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <searchBar key="tableHeaderView" contentMode="redraw" id="j4h-zw-jnw">
+                                    <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </searchBar>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Movie Cell" rowHeight="127" id="Swa-Ud-eEI" customClass="MovieTableViewCell" customModule="Flicks" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="92" width="320" height="127"/>
+                                        <rect key="frame" x="0.0" y="136" width="320" height="127"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Swa-Ud-eEI" id="wqJ-kJ-SvF">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="126"/>
@@ -58,6 +63,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Flicks" id="11I-JY-GyM"/>
                     <connections>
+                        <outlet property="searchBar" destination="j4h-zw-jnw" id="iYa-1x-8z6"/>
                         <outlet property="tableView" destination="3ep-Ac-Gsd" id="RC6-Na-7mD"/>
                     </connections>
                 </viewController>
