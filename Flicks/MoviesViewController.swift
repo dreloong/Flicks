@@ -40,8 +40,6 @@ class MoviesViewController: UIViewController {
 
         searchBar.delegate = self
 
-        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1.0)
-        tableView.tintColor = UIColor.whiteColor()
         tableView.dataSource = self
         tableView.delegate = self
 
@@ -60,10 +58,23 @@ class MoviesViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
 
+    // MARK: - Navigation
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+        let movieDetailViewController =
+            segue.destinationViewController as! MovieDetailViewController
+        movieDetailViewController.movie = filteredMovies![indexPath!.row]
+    }
+
+    // MARK: - Actions
+
     func onRefresh() {
         updateAllMovies()
         refreshControl.endRefreshing()
     }
+
+    // MARK: - Helpers
 
     func updateAllMovies() {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
@@ -149,12 +160,9 @@ extension MoviesViewController: UITableViewDataSource {
             forIndexPath: indexPath
         ) as! MovieTableViewCell
 
-        cell.backgroundColor = UIColor(white: 0.15, alpha: 1.0)
-        cell.tintColor = UIColor.whiteColor()
         cell.titleLabel.text = movie["title"] as? String
-        cell.titleLabel.textColor = UIColor.whiteColor()
         cell.overviewLabel.text = movie["overview"] as? String
-        cell.overviewLabel.textColor = UIColor.whiteColor()
+        cell.overviewLabel.sizeToFit()
 
         if let posterPath = movie["poster_path"] as? String {
             let posterImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)
