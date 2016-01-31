@@ -39,10 +39,14 @@ class MoviesViewController: UIViewController {
         super.viewDidLoad()
 
         searchBar.delegate = self
+
+        tableView.backgroundColor = UIColor(white: 0.15, alpha: 1.0)
+        tableView.tintColor = UIColor.whiteColor()
         tableView.dataSource = self
         tableView.delegate = self
 
         refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.whiteColor()
         refreshControl.addTarget(self, action: "onRefresh", forControlEvents: .ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
 
@@ -145,12 +149,34 @@ extension MoviesViewController: UITableViewDataSource {
             forIndexPath: indexPath
         ) as! MovieTableViewCell
 
+        cell.backgroundColor = UIColor(white: 0.15, alpha: 1.0)
+        cell.tintColor = UIColor.whiteColor()
         cell.titleLabel.text = movie["title"] as? String
+        cell.titleLabel.textColor = UIColor.whiteColor()
         cell.overviewLabel.text = movie["overview"] as? String
+        cell.overviewLabel.textColor = UIColor.whiteColor()
 
         if let posterPath = movie["poster_path"] as? String {
             let posterImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)
-            cell.posterImageView.setImageWithURL(posterImageUrl!)
+            let posterImageUrlRequest = NSURLRequest(URL: posterImageUrl!)
+            cell.posterImageView.setImageWithURLRequest(
+                posterImageUrlRequest,
+                placeholderImage: nil,
+                success: { (request, response, image) in
+                    if response != nil {
+                        cell.posterImageView.alpha = 0.0
+                        cell.posterImageView.image = image
+                        UIView.animateWithDuration(0.3, animations: {
+                            cell.posterImageView.alpha = 1.0
+                        })
+                    } else {
+                        cell.posterImageView.image = image
+                    }
+                },
+                failure: { (request, response, error) in
+                    cell.posterImageView.image = nil
+                }
+            )
         } else {
             cell.posterImageView.image = nil
         }
