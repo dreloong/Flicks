@@ -44,6 +44,8 @@ class MoviesViewController: UIViewController {
 
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.separatorColor = UIColor.blackColor()
+        tableView.tableFooterView = UIView()
 
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.whiteColor()
@@ -165,6 +167,11 @@ extension MoviesViewController: UITableViewDataSource {
         cell.titleLabel.text = movie["title"] as? String
         cell.overviewLabel.text = movie["overview"] as? String
         cell.overviewLabel.sizeToFit()
+        cell.selectedBackgroundView = {
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = UIColor(white: 0.3, alpha: 0.8)
+            return backgroundView
+        }()
 
         if let posterPath = movie["poster_path"] as? String {
             let posterImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)
@@ -197,5 +204,9 @@ extension MoviesViewController: UITableViewDataSource {
 }
 
 extension MoviesViewController: UITableViewDelegate {
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
 
 }

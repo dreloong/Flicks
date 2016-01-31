@@ -24,11 +24,11 @@
                                     <textInputTraits key="textInputTraits"/>
                                 </searchBar>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" alpha="0.80000000000000004" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Movie Cell" rowHeight="127" id="Swa-Ud-eEI" customClass="MovieTableViewCell" customModule="Flicks" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" alpha="0.80000000000000004" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Movie Cell" rowHeight="127" id="Swa-Ud-eEI" customClass="MovieTableViewCell" customModule="Flicks" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="136" width="320" height="127"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Swa-Ud-eEI" id="wqJ-kJ-SvF">
-                                            <rect key="frame" x="0.0" y="0.0" width="287" height="126"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="126"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="s2Y-l1-FbS">
@@ -46,7 +46,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="z1C-78-Nuh">
-                                                    <rect key="frame" x="0.0" y="0.0" width="92" height="126"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="92" height="127"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                             </subviews>
@@ -77,7 +77,7 @@
             </objects>
             <point key="canvasLocation" x="700" y="300"/>
         </scene>
-        <!--Movie Detail View Controller-->
+        <!--Flicks-->
         <scene sceneID="Mbq-cT-bkL">
             <objects>
                 <viewController id="9BG-M4-Zrk" customClass="MovieDetailViewController" customModule="Flicks" customModuleProvider="target" sceneMemberID="viewController">
@@ -121,7 +121,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="agc-FB-q7l"/>
+                    <navigationItem key="navigationItem" title="Flicks" id="agc-FB-q7l"/>
                     <connections>
                         <outlet property="infoView" destination="g6n-vj-5VY" id="gZG-11-vnc"/>
                         <outlet property="overviewLabel" destination="P1b-AG-Kaw" id="QIY-Ux-CcT"/>
