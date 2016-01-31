@@ -77,15 +77,22 @@ class MoviesViewController: UIViewController {
 
         let task: NSURLSessionDataTask = session.dataTaskWithRequest(
             request,
-            completionHandler: { (dataOrNil, response, error) in
+            completionHandler: { (data, response, error) in
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
-                if let data = dataOrNil {
-                    if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
-                        data,
-                        options:[]
-                    ) as? NSDictionary {
-                        self.allMovies = responseDictionary["results"] as? [NSDictionary]
-                    }
+                if error != nil {
+                    let alertController = UIAlertController(
+                        title: "Error",
+                        message: error?.localizedDescription,
+                        preferredStyle: .Alert
+                    )
+                    let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+                    alertController.addAction(defaultAction)
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                } else if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
+                    data!,
+                    options:[]
+                ) as? NSDictionary {
+                    self.allMovies = responseDictionary["results"] as? [NSDictionary]
                 }
             }
         )
@@ -93,10 +100,12 @@ class MoviesViewController: UIViewController {
     }
 
     func updateFilteredMovies() {
-        filteredMovies = searchText.isEmpty ? allMovies : allMovies!.filter({ movie in
-            let movieTitle = movie["title"] as! String
-            return movieTitle.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
-        })
+        filteredMovies = allMovies == nil || searchText.isEmpty
+            ? allMovies
+            : allMovies!.filter({ movie in
+                let movieTitle = movie["title"] as! String
+                return movieTitle.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+            })
     }
 
 }
