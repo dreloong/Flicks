@@ -15,6 +15,8 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
 
+    var endpoint: String!
+
     var allMovies: [NSDictionary]? {
         didSet {
             updateFilteredMovies()
@@ -79,7 +81,7 @@ class MoviesViewController: UIViewController {
     func updateAllMovies() {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let request = NSURLRequest(
-            URL: NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!,
+            URL: NSURL(string: "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")!,
             cachePolicy: .ReloadIgnoringLocalCacheData,
             timeoutInterval: 10
         )
