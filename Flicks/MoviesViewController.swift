@@ -13,9 +13,6 @@ import UIKit
 class MoviesViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var searchBar: UISearchBar!
-
-    var endpoint: String!
 
     var allMovies = [NSDictionary]() {
         didSet {
@@ -35,15 +32,21 @@ class MoviesViewController: UIViewController {
         }
     }
 
+    var endpoint: String!
     var refreshControl: UIRefreshControl!
+    var searchBar: UISearchBar!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        searchBar = UISearchBar()
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Search"
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
+
         collectionView.dataSource = self
         collectionView.delegate = self
-
-        searchBar.delegate = self
 
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.whiteColor()
