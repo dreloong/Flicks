@@ -12,12 +12,12 @@ import UIKit
 
 class MoviesViewController: UIViewController {
 
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var tableView: UITableView!
 
     var endpoint: String!
 
-    var allMovies: [NSDictionary]? {
+    var allMovies = [NSDictionary]() {
         didSet {
             updateFilteredMovies()
         }
@@ -29,9 +29,9 @@ class MoviesViewController: UIViewController {
         }
     }
 
-    var filteredMovies: [NSDictionary]? {
+    var filteredMovies = [NSDictionary]() {
         didSet {
-            tableView.reloadData()
+            collectionView.reloadData()
         }
     }
 
@@ -40,17 +40,15 @@ class MoviesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        searchBar.delegate = self
+        collectionView.dataSource = self
+        collectionView.delegate = self
 
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.separatorColor = UIColor.blackColor()
-        tableView.tableFooterView = UIView()
+        searchBar.delegate = self
 
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.whiteColor()
         refreshControl.addTarget(self, action: "onRefresh", forControlEvents: .ValueChanged)
-        tableView.insertSubview(refreshControl, atIndex: 0)
+        collectionView.insertSubview(refreshControl, atIndex: 0)
 
         let progressHud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         progressHud.labelText = "Loading"
@@ -65,10 +63,10 @@ class MoviesViewController: UIViewController {
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+        let indexPath = collectionView.indexPathForCell(sender as! UICollectionViewCell)
         let movieDetailViewController =
             segue.destinationViewController as! MovieDetailViewController
-        movieDetailViewController.movie = filteredMovies![indexPath!.row]
+        movieDetailViewController.movie = filteredMovies[indexPath!.row]
     }
 
     // MARK: - Actions
@@ -111,7 +109,7 @@ class MoviesViewController: UIViewController {
                     data!,
                     options:[]
                 ) as? NSDictionary {
-                    self.allMovies = responseDictionary["results"] as? [NSDictionary]
+                    self.allMovies = responseDictionary["results"] as! [NSDictionary]
                 }
             }
         )
@@ -119,9 +117,9 @@ class MoviesViewController: UIViewController {
     }
 
     func updateFilteredMovies() {
-        filteredMovies = allMovies == nil || searchText.isEmpty
+        filteredMovies = searchText.isEmpty
             ? allMovies
-            : allMovies!.filter({ movie in
+            : allMovies.filter({ movie in
                 let movieTitle = movie["title"] as! String
                 return movieTitle.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
             })
@@ -129,49 +127,26 @@ class MoviesViewController: UIViewController {
 
 }
 
-extension MoviesViewController: UISearchBarDelegate {
+extension MoviesViewController: UICollectionViewDataSource {
 
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        self.searchText = searchText
+    func collectionView(
+        collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        return filteredMovies.count
     }
 
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        searchBar.showsCancelButton = false
-        searchBar.text = ""
-        searchText = ""
-        searchBar.resignFirstResponder()
-    }
-
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-        searchBar.showsCancelButton = true
-    }
-
-}
-
-extension MoviesViewController: UITableViewDataSource {
-
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredMovies != nil ? filteredMovies!.count : 0
-    }
-
-    func tableView(
-        tableView: UITableView,
-        cellForRowAtIndexPath indexPath: NSIndexPath
-    ) -> UITableViewCell {
-        let movie = filteredMovies![indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier(
+    func collectionView(
+        collectionView: UICollectionView,
+        cellForItemAtIndexPath indexPath: NSIndexPath
+    ) -> UICollectionViewCell {
+        let movie = filteredMovies[indexPath.row]
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(
             "Movie Cell",
             forIndexPath: indexPath
-        ) as! MovieTableViewCell
+        ) as! MovieCollectionViewCell
 
         cell.titleLabel.text = movie["title"] as? String
-        cell.overviewLabel.text = movie["overview"] as? String
-        cell.overviewLabel.sizeToFit()
-        cell.selectedBackgroundView = {
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = UIColor(white: 0.3, alpha: 0.8)
-            return backgroundView
-        }()
 
         if let posterPath = movie["poster_path"] as? String {
             let posterImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)
@@ -203,10 +178,34 @@ extension MoviesViewController: UITableViewDataSource {
 
 }
 
-extension MoviesViewController: UITableViewDelegate {
+extension MoviesViewController: UICollectionViewDelegate {
+    func collectionView(
+        collectionView: UICollectionView,
+        didSelectItemAtIndexPath indexPath: NSIndexPath
+    ) {
+        collectionView.deselectItemAtIndexPath(indexPath, animated: true)
+    }
+}
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+extension MoviesViewController: UICollectionViewDelegateFlowLayout {
+
+}
+
+extension MoviesViewController: UISearchBarDelegate {
+
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchText = searchText
+    }
+
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchText = ""
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
     }
 
 }
