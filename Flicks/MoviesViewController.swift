@@ -40,9 +40,13 @@ class MoviesViewController: UIViewController {
         super.viewDidLoad()
 
         searchBar = UISearchBar()
-        searchBar.sizeToFit()
-        searchBar.placeholder = "Search"
         searchBar.delegate = self
+        searchBar.keyboardAppearance = .Dark
+        searchBar.placeholder = "Search"
+        searchBar.sizeToFit()
+        let searchField = searchBar.valueForKey("_searchField") as! UITextField
+        searchField.backgroundColor = UIColor(white: 0.2, alpha: 1)
+        searchField.textColor = UIColor(white: 0.7, alpha: 1)
         navigationItem.titleView = searchBar
 
         collectionView.dataSource = self

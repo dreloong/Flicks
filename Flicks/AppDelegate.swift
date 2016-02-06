@@ -41,6 +41,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         topRatedMoviesViewController.endpoint = "top_rated"
 
         let tabBarController = UITabBarController()
+        tabBarController.tabBar.barTintColor = UIColor.blackColor()
+        tabBarController.tabBar.barStyle = .Black
+        tabBarController.tabBar.translucent = true
         tabBarController.viewControllers = [
             nowPlayingMoviesNavigationController,
             topRatedMoviesNavigationController
