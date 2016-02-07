@@ -15,6 +15,8 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
 
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
 
     var movie: NSDictionary!
@@ -28,6 +30,8 @@ class MovieDetailViewController: UIViewController {
         )
 
         titleLabel.text = movie["title"] as? String
+        dateLabel.text = movie["release_date"] as? String
+        ratingLabel.text = String(movie["vote_average"] as! Float)
         overviewLabel.text = movie["overview"] as? String
         overviewLabel.sizeToFit()
         if let posterPath = movie["poster_path"] as? String {
