@@ -112,11 +112,13 @@ class MoviesViewController: UIViewController {
                     let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
                     alertController.addAction(defaultAction)
                     self.presentViewController(alertController, animated: true, completion: nil)
-                } else if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
-                    data!,
-                    options:[]
-                ) as? NSDictionary {
-                    self.allMovies = responseDictionary["results"] as! [NSDictionary]
+                } else if let data = data {
+                    if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
+                        data,
+                        options:[]
+                    ) as? NSDictionary {
+                        self.allMovies = responseDictionary["results"] as! [NSDictionary]
+                    }
                 }
             }
         )

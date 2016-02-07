@@ -40,13 +40,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             topRatedMoviesNavigationController.topViewController as! MoviesViewController
         topRatedMoviesViewController.endpoint = "top_rated"
 
+        let upcomingMoviesNavigationController =
+        storyboard.instantiateViewControllerWithIdentifier("Movies Navigation Controller")
+            as! UINavigationController
+        upcomingMoviesNavigationController.tabBarItem.title = "Upcoming"
+        upcomingMoviesNavigationController.tabBarItem.image = UIImage(named: "Upcoming")
+
+        let upcomingMoviesViewController =
+            upcomingMoviesNavigationController.topViewController as! MoviesViewController
+        upcomingMoviesViewController.endpoint = "upcoming"
+
         let tabBarController = UITabBarController()
         tabBarController.tabBar.barTintColor = UIColor.blackColor()
         tabBarController.tabBar.barStyle = .Black
         tabBarController.tabBar.translucent = true
         tabBarController.viewControllers = [
+            topRatedMoviesNavigationController,
             nowPlayingMoviesNavigationController,
-            topRatedMoviesNavigationController
+            upcomingMoviesNavigationController
         ]
 
         window?.rootViewController = tabBarController
