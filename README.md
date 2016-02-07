@@ -52,9 +52,9 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 # Project 2 - *Flicks*
 
-**Flicks** is a movies app displaying 'now playing' and 'top rated' movies using [The Movie Database API](http://docs.themoviedb.apiary.io/#).
+**Flicks** is a movies app displaying 'top rated', 'now playing' and 'upcoming' movies using [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: **2** hours spent in total
+Time spent: **8** hours spent in total
 
 ## User Stories
 
@@ -67,28 +67,26 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 - [ ] For the large poster, load the low resolution image first and then switch to the high resolution image when complete.
-- [ ] Customize the navigation bar.
+- [X] Customize the navigation bar.
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [X] Move search bar onto navigation bar.
+- [X] Create another tab for **Upcoming** movies.
+- [X] Improve the user experience of movie detail view.
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
--
--
+- The best way to add a search bar to a collection view.
+- Customize the background color of navigation bar.
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/12n50XN.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/JlsAH3w.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
-
-## Notes
-
-Describe any challenges encountered while building the app.
 
 ## License
 
