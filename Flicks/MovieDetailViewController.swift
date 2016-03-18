@@ -19,7 +19,7 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
 
-    var movie: NSDictionary!
+    var movie: Movie!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,20 +29,15 @@ class MovieDetailViewController: UIViewController {
             height: infoView.frame.origin.y + infoView.frame.height
         )
 
-        titleLabel.text = movie["title"] as? String
-        dateLabel.text = movie["release_date"] as? String
-        ratingLabel.text = String(movie["vote_average"] as! Float)
-        overviewLabel.text = movie["overview"] as? String
+        titleLabel.text = movie.title
+        dateLabel.text = movie.releaseDate
+        ratingLabel.text = String(movie.rating!)
+        overviewLabel.text = movie.overview
         overviewLabel.sizeToFit()
-        if let posterPath = movie["poster_path"] as? String {
-            let posterImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)
-            posterImageView.setImageWithURL(posterImageUrl!)
-        }
+        posterImageView.setImageWithURL(movie.posterImageUrl!)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
 }

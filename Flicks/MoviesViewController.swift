@@ -14,7 +14,7 @@ class MoviesViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    var allMovies = [NSDictionary]() {
+    var allMovies = [Movie]() {
         didSet {
             updateFilteredMovies()
         }
@@ -26,7 +26,7 @@ class MoviesViewController: UIViewController {
         }
     }
 
-    var filteredMovies = [NSDictionary]() {
+    var filteredMovies = [Movie]() {
         didSet {
             collectionView.reloadData()
         }
@@ -103,10 +103,10 @@ class MoviesViewController: UIViewController {
             request,
             completionHandler: { (data, response, error) in
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
-                if error != nil {
+                if let error = error {
                     let alertController = UIAlertController(
                         title: "Error",
-                        message: error?.localizedDescription,
+                        message: error.localizedDescription,
                         preferredStyle: .Alert
                     )
                     let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
@@ -117,7 +117,8 @@ class MoviesViewController: UIViewController {
                         data,
                         options:[]
                     ) as? NSDictionary {
-                        self.allMovies = responseDictionary["results"] as! [NSDictionary]
+                        let dictionaries = responseDictionary["results"] as! [NSDictionary]
+                        self.allMovies = Movie.movies(dictionaries)
                     }
                 }
             }
@@ -129,11 +130,9 @@ class MoviesViewController: UIViewController {
         filteredMovies = searchText.isEmpty
             ? allMovies
             : allMovies.filter({ movie in
-                let movieTitle = movie["title"] as! String
-                return movieTitle.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+                return movie.title.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
             })
     }
-
 }
 
 extension MoviesViewController: UICollectionViewDataSource {
@@ -155,39 +154,13 @@ extension MoviesViewController: UICollectionViewDataSource {
             forIndexPath: indexPath
         ) as! MovieCollectionViewCell
 
-        cell.titleLabel.text = movie["title"] as? String
-
-        if let posterPath = movie["poster_path"] as? String {
-            let posterImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)
-            let posterImageUrlRequest = NSURLRequest(URL: posterImageUrl!)
-            cell.posterImageView.setImageWithURLRequest(
-                posterImageUrlRequest,
-                placeholderImage: nil,
-                success: { (request, response, image) in
-                    if response != nil {
-                        cell.posterImageView.alpha = 0.0
-                        cell.posterImageView.image = image
-                        UIView.animateWithDuration(0.3, animations: {
-                            cell.posterImageView.alpha = 1.0
-                        })
-                    } else {
-                        cell.posterImageView.image = image
-                    }
-                },
-                failure: { (request, response, error) in
-                    cell.posterImageView.image = nil
-                }
-            )
-        } else {
-            cell.posterImageView.image = nil
-        }
-
+        cell.movie = movie
         return cell
     }
-
 }
 
 extension MoviesViewController: UICollectionViewDelegate {
+
     func collectionView(
         collectionView: UICollectionView,
         didSelectItemAtIndexPath indexPath: NSIndexPath
@@ -216,5 +189,4 @@ extension MoviesViewController: UISearchBarDelegate {
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchBar.showsCancelButton = true
     }
-
 }

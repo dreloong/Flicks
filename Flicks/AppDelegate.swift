@@ -41,8 +41,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         topRatedMoviesViewController.endpoint = "top_rated"
 
         let upcomingMoviesNavigationController =
-        storyboard.instantiateViewControllerWithIdentifier("Movies Navigation Controller")
-            as! UINavigationController
+            storyboard.instantiateViewControllerWithIdentifier("Movies Navigation Controller")
+                as! UINavigationController
         upcomingMoviesNavigationController.tabBarItem.title = "Upcoming"
         upcomingMoviesNavigationController.tabBarItem.image = UIImage(named: "Upcoming")
 
@@ -65,5 +65,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
-
 }
